@@ -1,0 +1,4 @@
+class Config:
+    SQLALCHEMY_DATABASE_URI = 'postgresql://username:password@localhost/PTCGTracker'
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
+    
