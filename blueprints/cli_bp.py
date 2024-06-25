@@ -59,23 +59,58 @@ def seed_db():
     db.session.add_all(sets)
     db.session.commit()
 
+    set_mapping = {
+        "swshp": 1,
+        "swsh45": 2,
+        "swsh5": 3,
+        "swsh6": 4,
+        "swsh7": 5,
+        "cel25": 6,
+        "swsh8": 7,
+        "fut20": 8,
+        "swsh9": 9,
+        "swsh9tg": 10,
+        "swsh10": 11,
+        "swsh10tg": 12,
+        "pgo": 13,
+        "swsh11": 14,
+        "swsh11tg": 15,
+        "swsh12": 16,
+        "swsh12tg": 17,
+        "mcd22": 18,
+        "swsh12pt5": 19,
+        "swsh12pt5gg": 20,
+        "sv1": 21,
+        "svp": 22,
+        "sv2": 23,
+        "sve": 24,
+        "sv3": 25,
+        "sv3pt5": 26,
+        "sv4": 27,
+        "sv4pt5": 28,
+        "sv5": 29,
+        "sv6": 30
+    }
+
     cards = []
 
     with open("./seed_json/cards.json", 'r') as file:
         data = json.load(file)
         for item in data:
-            
-            
-            
+            set_id = set_mapping.get(item["set_id"])
+
+            if set_id is None:
+                raise ValueError(f"Unknown set id: {item['set_id']}")
+
             card = Card(
                 card_id=item["card_id"],
                 name=item["name"],
                 type=item["supertype"],
-                set_id=item["set_id"]
+                set_id=set_id
             )
+            cards.append(card)
+            
+    db.session.add_all(cards)
+    db.session.commit()
 
-            "card_id": "swshp-SWSH001",
-            "name": "Grookey",
-            "supertype": "Pokemon",
-            "set_id": "swshp"
-            sets.append(set)
+    print("Dabase seeded")
