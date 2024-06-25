@@ -113,4 +113,4 @@ def seed_db():
     db.session.add_all(cards)
     db.session.commit()
 
-    print("Dabase seeded")
+    print("Table seeded")
