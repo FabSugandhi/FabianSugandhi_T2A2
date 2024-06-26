@@ -25,7 +25,7 @@ def one_card(id):
 @jwt_required()
 def create_card():
     admin_only()
-    card_info = CardSchema(only=["card_id", "name", "type", "set_id"]).load(
+    card_info = CardSchema(only=["card_id", "name", "type", "set_id"], unknown="exclude").load(
         request.json
     )
     card = Card(
@@ -44,7 +44,7 @@ def create_card():
 def update_card(id):
     card = db.get_or_404(Card, id)
     admin_only()
-    card_info = CardSchema(only=["card_id", "name", "type", "set_id"]).load(
+    card_info = CardSchema(only=["card_id", "name", "type", "set_id"], unknown="exclude").load(
         request.json
     )
     card = Card(

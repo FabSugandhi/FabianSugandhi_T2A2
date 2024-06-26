@@ -3,7 +3,7 @@ from marshmallow import fields
 
 class DeckCard(db.Model):
     # define the table name for the db
-    __tablename__= "deckcards"
+    __tablename__= "deck_cards"
     # Set the primary key.
     id = db.Column(db.Integer,primary_key=True)
 
@@ -26,7 +26,7 @@ class DeckCard(db.Model):
 class DeckCardSchema(ma.Schema):
 
     deck = fields.Nested("DeckSchema", only={"id", "name"})
-    card = fields.Nested("CardSchema")
+    card = fields.Nested("CardSchema", only={"id", "name"})
 
     class Meta:
         ordered = True
