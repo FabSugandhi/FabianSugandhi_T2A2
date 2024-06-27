@@ -31,5 +31,16 @@ def login():
 @users_bp.route('/', methods=['POST'])
 @admin_only
 def create_user():
-    params = UserSchema(only=["email", "password", "name", "is_admin"]).load(request.json)
-    return params
+    user_info = UserSchema(only=["email", "password", "first_name", "last_name", "is_admin"]).load(request.json)
+
+    user = User(
+        email=user_info["email"],
+        password=bcrypt.generate_password_hash(user_info["password"]).decode("utf8"),
+        first_name=user_info["first_name"],
+        last_name=user_info["last_name"],
+        is_admin=user_info["is_admin"]
+    )
+    
+    db.session.add(user)
+    db.session.commit()
+    return UserSchema().dump(user), 201

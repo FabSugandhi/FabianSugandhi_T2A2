@@ -20,7 +20,6 @@ class Card(db.Model):
     set = db.relationship(
         "Set",
         back_populates="cards",
-        cascade="all, delete"
     )
     deck_cards = db.relationship(
         "DeckCard",
@@ -33,8 +32,8 @@ class CardSchema(ma.Schema):
     name = fields.String(required=True)
     type = fields.String(required=True, validate=OneOf(VALID_TYPES))
 
-    set = fields.Nested("SetSchema", only={"id", "name"})
+    set = fields.Nested("SetSchema", only={"name"})
 
     class Meta:
         ordered = True
-        fields = ("id", "card_id", "name", "type", "set")
+        fields = ("id", "card_id", "name", "type", "set_id", "set")

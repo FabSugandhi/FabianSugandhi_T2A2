@@ -11,6 +11,7 @@ db_commands = Blueprint("db", __name__)
 
 @db_commands.cli.command("create")
 def create_db():
+    db.reflect()
     db.drop_all()
     db.create_all()
     print("Table created.")
@@ -27,14 +28,14 @@ def seed_db():
             is_admin=True
         ),
         User(
-            email="user1",
+            email="user1@email.com",
             password=bcrypt.generate_password_hash("user1").decode("utf8"),
             first_name="user",
             last_name="1",
             is_admin=False
         ),
         User(
-            email="user2",
+            email="user2@email.com",
             password=bcrypt.generate_password_hash("user2").decode("utf8"),
             first_name="user",
             last_name="2",

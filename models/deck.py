@@ -17,7 +17,6 @@ class Deck(db.Model):
     user = db.relationship(
         "User",
         back_populates="decks",
-        cascade="all, delete"
     )
     deck_cards = db.relationship(
         "DeckCard",

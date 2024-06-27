@@ -8,26 +8,25 @@ class DeckCard(db.Model):
     id = db.Column(db.Integer,primary_key=True)
 
     # Foreign keys
-    deck_id = db.Column(db.Integer, db.ForeignKey("decks.id"), nullable=False)
-    card_id = db.Column(db.Integer, db.ForeignKey("cards.id"), nullable=False)
+    deck_id = db.Column(db.Integer, db.ForeignKey("decks.id", ondelete='CASCADE'), nullable=False)
+    card_id = db.Column(db.Integer, db.ForeignKey("cards.id", ondelete='CASCADE'), nullable=False)
 
     # define the relationships
     deck = db.relationship(
         "Deck",
         back_populates="deck_cards",
-        cascade="all, delete"
     )
     card = db.relationship(
         "Card",
         back_populates="deck_cards",
-        cascade="all, delete"
     )
 
 class DeckCardSchema(ma.Schema):
-
-    deck = fields.Nested("DeckSchema", only={"id", "name"})
-    card = fields.Nested("CardSchema", only={"id", "name"})
+    deck_id = fields.Integer()
+    card_id = fields.Integer()
+    deck = fields.Nested("DeckSchema", only={"name"})
+    card = fields.Nested("CardSchema", only={"name"})
 
     class Meta:
         ordered = True
-        fields = ("id", "deck", "card")
+        fields = ("id", "deck_id", "card_id", "deck", "card")

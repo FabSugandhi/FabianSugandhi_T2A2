@@ -7,28 +7,28 @@ from init import db
 decks_bp = Blueprint("decks", __name__, url_prefix="/decks")
 
 # Get all decks
-@decks_bp.route("/", methods=["GET"])
+@decks_bp.route("/", methods=["GET"], endpoint="all_decks")
 def all_decks():
     stmt = db.select(Deck)
     decks = db.session.scalars(stmt).all()
     return DeckSchema(many=True).dump(decks)
 
 # Get one deck
-@decks_bp.route("/<int:id>", methods=["GET"])
+@decks_bp.route("/<int:id>", methods=["GET"], endpoint="one_decks")
 def one_deck(id):
     deck = db.get_or_404(Deck, id)
     return DeckSchema().dump(deck)
 
 # Create a new deck
-@decks_bp.route("/", methods=["POST"])
+@decks_bp.route("/", methods=["POST"], endpoint="create_deck")
 @jwt_required()
 def create_deck():
-    deck_info = DeckSchema(only=["name", "decktypes", "description"], unknown="exclude").load(
+    deck_info = DeckSchema(only=["name", "deck_types", "description"], unknown="exclude").load(
         request.json
     )
     deck = Deck(
         name=deck_info["name"],
-        decktypes=deck_info.get["decktypes", ""],
+        deck_types=deck_info.get("deck_types", ""),
         description=deck_info.get("description", ""),
         user_id=get_jwt_identity()
     )
@@ -37,12 +37,12 @@ def create_deck():
     return DeckSchema().dump(deck), 201
 
 # Update an existing deck
-@decks_bp.route("/<int:id>", methods=["PUT", "PATCH"])
+@decks_bp.route("/<int:id>", methods=["PUT", "PATCH"], endpoint="update_deck")
 @jwt_required()
 def update_deck(id):
     deck = db.get_or_404(Deck, id)
     authorize_owner(deck)
-    deck_info = DeckSchema(only=["name", "decktypes", "description"], unknown="exclude").load(
+    deck_info = DeckSchema(only=["name", "deck_types", "description"], unknown="exclude").load(
         request.json
     )
     if "name" in deck_info:
@@ -55,7 +55,7 @@ def update_deck(id):
     return DeckSchema().dump(deck)
 
 # Delete an existing deck
-@decks_bp.route("/<int:id>", methods=["DELETE"])
+@decks_bp.route("/<int:id>", methods=["DELETE"], endpoint="delete_deck")
 @jwt_required()
 def delete_deck(id):
     deck = db.get_or_404(Deck, id)
