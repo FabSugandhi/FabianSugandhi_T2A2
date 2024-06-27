@@ -27,9 +27,11 @@ class Deck(db.Model):
 
 class DeckSchema(ma.Schema):
     name = fields.String(required=True)
+    deck_types = fields.String()
+    description = fields.String()
 
     user = fields.Nested("UserSchema", only={"id", "first_name", "last_name"})
-    deck_card = fields.Nested("DeckCardSchema", many=True)
+    deck_cards = fields.Nested("DeckCardSchema", many=True)
 
     class Meta:
         ordered = True
