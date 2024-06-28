@@ -1,10 +1,9 @@
 from flask import Blueprint, request
-from flask_jwt_extended import jwt_required, get_jwt_identity
+from flask_jwt_extended import jwt_required
 from auth import authorize_owner
 from models.deck_card import DeckCard, DeckCardSchema
 from models.deck import Deck
 from init import db
-import json
 
 
 deck_cards_bp = Blueprint("deck_cards", __name__, url_prefix="/decks/<int:deck_id>/deck_cards")

@@ -3,8 +3,7 @@ from flask import Blueprint, request
 from flask_jwt_extended import create_access_token
 from auth import admin_only
 from models.user import User, UserSchema
-from init import app, db, bcrypt
-import json
+from init import db, bcrypt
 
 users_bp = Blueprint("users", __name__, url_prefix="/users")
 

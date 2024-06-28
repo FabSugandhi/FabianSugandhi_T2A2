@@ -1,7 +1,5 @@
 from flask import Blueprint
 from models.card import Card
-from models.deck_card import DeckCard
-from models.deck import Deck
 from models.set import Set
 from models.user import User
 from init import app, db, bcrypt

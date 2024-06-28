@@ -1,9 +1,7 @@
 from flask import Blueprint, request
-from flask_jwt_extended import jwt_required
 from auth import admin_only
 from models.card import Card, CardSchema
-from init import app, db, bcrypt
-import json
+from init import db
 
 cards_bp = Blueprint("cards", __name__, url_prefix="/cards")
 
