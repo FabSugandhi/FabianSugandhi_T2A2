@@ -90,7 +90,33 @@ This app will be designed so that it can be used flexibly in multiple platforms 
 
 ### [GitHub Projects link](https://github.com/users/FabSugandhi/projects/3)
 
+The tasks for this project were allocated and tracked using GitHub Projects. The tasks are categorized into cards which are arranged manually according to the order that they need to be created, as some are dependent on the others. They are then organized into the columns available on GitHub Project, namely __To Do__, __In Progress__ and __Done__. These are update as each task are started and finished. New tasks were also added in the appropriate order of priority whenever it was required to do so.
 
+I decided to keep the due dates for each task to be flexible for this assignment since there will be a lot of back and forth between different tasks, even if they were completed correctly before due to the relational nature of this project. This is also to ensure that instead of sticking to a strict time schedule I should organize my working based on priorities and importance of the available tasks.
+
+Git was also used to keep track of the version updates, with frequent git commits in order to safely backup the project and to be able to track my progress and review the progress of the assignment. It is also useful to get an outlook of the efficiency of working on this project and where can I improve my preformance.
+
+Finally, the __Standup__ section in Coder Academy's Discord channel has proven very helpful to review my progress by setting other studnets' progress as the benchmark.I utilized this often to check whether I am behind or ahead of the expected project timeline. However, although this is an important aspect of this assignment, I didn't update my Standups often enough since I was too focused on catching up and finishing the assignment in time, especially since I had to to restructure my codes due to a fatal error which I can't pinpoint where.
+
+### Screenshots
+
+![GitHub Project 1](./docs/Github_project_1.png)
+
+![GitHub Project 2](./docs/Github_project_2.png)
+
+![GitHub Project 3](./docs/Github_project_3.png)
+
+![GitHub Project 4](./docs/Github_project_4.png)
+
+![GitHub Project 5](./docs/Github_project_5.png)
+
+![GitHub Project 6](./docs/Github_project_6.png)
+
+![GitHub Project 7](./docs/Github_project_7.png)
+
+![GitHub Project 8](./docs/Github_project_8.png)
+
+![GitHub Project 9](./docs/Github_project_9.png)
 
 ## R3: List and explain the third-party services, packages and dependencies used in this app
 
@@ -134,11 +160,27 @@ However, Kolovson argued that PostgreSQL has the tendency to be convoluted with 
 
 ## R5: Explain the features, purpose and functionalities of the object-relational mapping system (ORM) used in this app
 
-NEED TO BE DONE
+This application was developed using SQLAlchemy as the Object-Relational Mapping (ORM) system. ORM is a technique or layer that is used to bridge Object-Oriented Programs (OOP) and relational databases (Abba, 2022). SQL is used to perform operations such as create, reading, and deleting data from databases, otherwise known as CRUD (Create, Read, Update, Delete) operations. By using an ORM tool, such as the SQLAlchemy used for this app, SQL queries can be generated and performed using OOP languages (Python for this app) instead of manually writing the traditional complex SQL queries, greatly simplifying the code and making the development process more efficient (Abba, 2022).
+
+SQLAlchemy functions by first mapping objects in the programming language and the tables in the database, which is done by developers defining the mapping between the different objects and fields and the columns in the databas in the app's native programming language (Kanade, 2023). These mappings will then be used to work on the database records as objects by interacting with them using object-oriented programming.
+
+SQLAlchemy also use multiple strategies to map the tables and objects in the database. A few examples of these are achieved are by using active record (defining the structure of table and class pairing and mapping each class instance to the table's records), data mapper (separating the objects, such as the models, from the database layer), table gateway (structuring the app such that each table has a separate gateway through which the models access them), identity mapping (minimizing database queries by ensuring each instance corresponds to each object in the app), and unit of work (managing database transactions by defining which set of operations should be grouped as a single transaction) (Kanade, 2023).
+
+SQLAlchemy also provides other functionalities, such as data validation using different constraints and field types, allowing relationships between tables in a relational database (such as one-to-one, one-to-many, etc.), and handling database schema modifications which can be achieved auto-generation of database schema based on changes made to the object mapping (Kanade, 2023).
 
 ## R6: Design an entity relationship diagram (ERD) for this app’s database, and explain how the relations between the diagrammed models will aid the database design
 
-NEED TO BE DONE
+![ERD](./docs/ERD.png)
+
+For the purpose of this application, a PostgreSQL database named pokemontcg_db is created. To design and implement their relationships with one another, 5 tables are created in the database. They are namely __users__, __decks__, __deck_cards__, __cards__, and __sets__. The interactions between the records in these 5 relations determine the main functionalities of the app.
+
+### Users
+
+User-related information are stored in the __users__ table. Each record in the table represents a registered user of the application, with information on their email, hashed password, name, admin rights, and their unique ID (the primary key). 
+
+### Decks
+
+Deck-related information are stored in the __decks__ table. Each record in the table represents a deck that a user has registered into the system, with information on their name, types, description, the user who made the post (using a __user_id__ foreign key) and their unique ID (the primary key). As a result, a __user__ can be associated with multiple __decks__, and a __deck__ can be associated with only one __user__.
 
 ## R7: Explain the implemented models and their relationships, including how the relationships aid the database implementation
 
@@ -146,9 +188,322 @@ NEED TO BE DONE
 
 ## R8: Explain how to use this application’s API endpoints
 
-NEED TO BE DONE
+### Cards Blueprint
+
+#### 1. /cards/
+
+__HTTP Request__: GET
+
+__Endpoint__: all_cards
+
+__Required Data__: None
+
+__Expected Response Data__: Expected return of JSON response with data on all cards on the database
+
+__Authentication methods__: None
+
+__Purpose__: Allows users to view all cards on the database
+
+#### 2. /cards/< int:id >
+
+__HTTP Request__: GET
+
+__Endpoint__: one_card
+
+__Required Data__: None
+
+__Expected Response Data__: Expected return of JSON response with data of card with specified ID on the database
+
+__Authentication methods__: None
+
+__Purpose__: Allows users to view specific cards on the database
+
+#### 3. /cards/
+
+__HTTP Request__: POST
+
+__Endpoint__: create_card
+
+__Required Data__: card_id, name, type, set_id
+
+__Expected Response Data__: Expected return of JSON response with data of the newly created card
+
+__Authentication methods__: Admin only
+
+__Purpose__: Allows admin users to add cards to the database
+
+#### 4. /cards/< int:id >
+
+__HTTP Request__: PUT or PATCH
+
+__Endpoint__: update_card
+
+__Required Data__: card_id, name, type, set_id
+
+__Expected Response Data__: Expected return of JSON response with data of the updated card
+
+__Authentication methods__: Admin only
+
+__Purpose__: Allows admin users to update specific cards in the database
+
+#### 5. /cards/< int:id >
+
+__HTTP Request__: DELETE
+
+__Endpoint__: delete_card
+
+__Required Data__: None
+
+__Expected Response Data__: Expected return of empty JSON response
+
+__Authentication methods__: Admin only
+
+__Purpose__: Allows admin users to delete specific cards in the database
+
+### Deck_cards Blueprint
+
+#### 1. /decks/< int:deck_id >/deck_cards/
+
+__HTTP Request__: GET
+
+__Endpoint__: all_deck_cards
+
+__Required Data__: None
+
+__Expected Response Data__: Expected return of JSON response with data on all cards of the specified deck ID in the database
+
+__Authentication methods__: None
+
+__Purpose__: Allows users to view all cards of the specified deck ID in the database
+
+#### 2. /decks/< int:deck_id >/deck_cards/< int:id >
+
+__HTTP Request__: GET
+
+__Endpoint__: one_deck_card
+
+__Required Data__: Noe
+
+__Expected Response Data__: Expected return of JSON response with data of card with specified ID from the specified deck ID on the database
+
+__Authentication methods__: None
+
+__Purpose__: Allows users to view specific cards of the specified deck on the database
+
+#### 3. /decks/< int:deck_id >/deck_cards/
+
+__HTTP Request__: POST
+
+__Endpoint__: create_deck_card
+
+__Required Data__: a list of {deck_id, card_id} JSON array, multiple cards allowed
+
+__Expected Response Data__: Expected return of JSON response with data of the newly created card in that deck ID
+
+__Authentication methods__: Valid JWT Token, makes sure only owner of the deck can use the function
+
+__Purpose__: Allows authorized users to add cards to the deck
+
+### 4. /decks/< int:deck_id >/deck_cards/< int:id >
+
+__HTTP Request__: PUT or PATCH
+
+__Endpoint__: update_deck_card
+
+__Required Data__: card_id
+
+__Expected Response Data__: Expected return of JSON response with data of the updated card
+
+__Authentication methods__: Valid JWT Token, makes sure only owner of the deck can use the function
+
+__Purpose__: Allows authorized users to update specific cards in their deck
+
+### 5. /decks/< int:deck_id >/deck_cards/< int:id >
+
+__HTTP Request__: DELETE
+
+__Endpoint__: delete_deck_card
+
+__Required Data__: None
+
+__Expected Response Data__: Expected return of empty JSON response
+
+__Authentication methods__: Valid JWT Token, makes sure only owner of the deck can use the function
+
+__Purpose__: Allows authorized users to delete specific cards from their deck
+
+### Decks Blueprint
+
+#### 1. /decks/
+
+__HTTP Request__: GET
+
+__Endpoint__: all_decks
+
+__Required Data__: None
+
+__Expected Response Data__: Expected return of JSON response with data on all decks on the database
+
+__Authentication methods__: None
+
+__Purpose__: Allows users to view all decks on the database
+
+#### 2. /decks/< int:id >
+
+__HTTP Request__: GET
+
+__Endpoint__: one_deck
+
+__Required Data__: None
+
+__Expected Response Data__: Expected return of JSON response with data of deck with specified ID on the database
+
+__Authentication methods__: None
+
+__Purpose__: Allows users to view specific decks on the database
+
+#### 3. /decks/
+
+__HTTP Request__: POST
+
+__Endpoint__: create_deck
+
+__Required Data__: name, deck_types, description
+
+__Expected Response Data__: Expected return of JSON response with data of the newly created deck
+
+__Authentication methods__: Valid JWT Token, makes sure only owner of the deck can use the function
+
+__Purpose__: Allows authorized users to add decks to the database
+
+#### 4. /decks/< int:id >
+
+__HTTP Request__: PUT or PATCH
+
+__Endpoint__: update_deck
+
+__Required Data__: name, deck_types, description
+
+__Expected Response Data__: Expected return of JSON response with data of the updated deck
+__Authentication methods__: Valid JWT Token, makes sure only owner of the deck can use the function
+
+__Purpose__: Allows updated users to update specific decks in the database
+
+#### 5. /decks/< int:id >
+
+__HTTP Request__: DELETE
+
+__Endpoint__: delete_deck
+
+__Required Data__: None
+
+__Expected Response Data__: Expected return of empty JSON response
+
+__Authentication methods__: Valid JWT Token, makes sure only owner of the deck can use the function
+
+__Purpose__: Allows authorized users to delete specific decks in the database
+
+### Sets Blueprint
+
+#### 1. /sets/
+
+__HTTP Request__: GET
+
+__Endpoint__: all_sets
+
+__Required Data__: None
+
+__Expected Response Data__: Expected return of JSON response with data on all sets on the database
+
+__Authentication methods__: None
+
+__Purpose__: Allows users to view all sets on the database
+
+#### 2. /sets/< int:id >
+
+__HTTP Request__: GET
+
+__Endpoint__: one_set
+
+__Required Data__: None
+
+__Expected Response Data__: Expected return of JSON response with data of set with specified ID on the database
+
+__Authentication methods__: None
+
+__Purpose__: Allows users to view specific sets on the database
+
+#### 3. /sets/
+
+__HTTP Request__: POST
+
+__Endpoint__: create_set
+
+__Required Data__: name, series
+
+__Expected Response Data__: Expected return of JSON response with data of the newly created set
+
+__Authentication methods__: Admin only
+
+__Purpose__: Allows admin users to add sets to the database
+
+#### 4. /sets/< int:id >
+
+__HTTP Request__: PUT or PATCH
+
+__Endpoint__: update_set
+
+__Required Data__: name, series
+
+__Expected Response Data__: Expected return of JSON response with data of the updated set
+
+__Authentication methods__: Admin only
+
+__Purpose__: Allows admin users to update specific sets in the database
+
+#### 5. /sets/< int:id >
+
+__HTTP Request__: DELETE
+
+__Endpoint__: delete_set
+
+__Required Data__: None
+
+__Expected Response Data__: Expected return of empty JSON response
+
+__Authentication methods__: Admin only
+
+__Purpose__: Allows admin users to delete specific sets in the database
+
+### Users Blueprint
+
+#### 1. /users/login
+
+__HTTP Request__: POST
+
+__Required Data__: email, password
+
+__Expected Response Data__: Expected return of JSON response with the JWT token for authentication
+
+__Authentication methods__: None
+
+__Purpose__: Allows users to verify their credentials and generate a JWT token for authentication to access specific functions
+
+#### 2. /users
+
+__HTTP Request__: POST
+
+__Required Data__: email, password, first_name, last_name, is_admin
+
+__Expected Response Data__: Expected return of JSON response with data of newly created user
+
+__Authentication methods__: Admin only
+
+__Purpose__: Allows admin users to add users to the database
 
 ## Reference List
+
+Abba, I. V. (2022). _What is an ORM: the meaning of object relational mapping database tools_. FreeCodeCamp. https://www.freecodecamp.org/news/what-is-an-orm-the-meaning-of-object-relational-mapping-database-tools/
 
 Bayer, M., & SQLAlchemy Contributors. (n.d.). _SQL Alchemy: the Python SQL toolkit and object relational mapper_. https://www.sqlalchemy.org/
 
@@ -161,6 +516,8 @@ Gilbert, L. A. (2016). _Flask-JWT-Extended's documentation_. https://flask-jwt-e
 Gregorio, F. D., Varrazzo, D., & The Psycopg Team. (2021). _Psycopg - PostgreSQL database adapter for Python_. https://www.psycopg.org/docs/
 
 IBM. (n.d.). _What is PostgreSQL?_. IBM. https://www.ibm.com/topics/postgresql
+
+Kanade, V. (2023). _What is ORM? A comprehensive guide to object-relational mapping_. Spiceworks. https://www.spiceworks.com/tech/data-management/articles/what-is-orm-a-comprehensive-guide-to-object-relational-mapping/
 
 Kolovson, C. (2021). _Weighing the pros and cons of PostgreSQL_. https://medium.com/@ckolovson/weighing-the-pros-and-cons-of-postgresql-5a3603dd34ce
 
