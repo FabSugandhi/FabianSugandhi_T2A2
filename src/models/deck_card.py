@@ -8,8 +8,8 @@ class DeckCard(db.Model):
     id = db.Column(db.Integer,primary_key=True)
 
     # Foreign keys
-    deck_id = db.Column(db.Integer, db.ForeignKey("decks.id", ondelete='CASCADE'), nullable=False)
-    card_id = db.Column(db.Integer, db.ForeignKey("cards.id", ondelete='CASCADE'), nullable=False)
+    deck_id = db.Column(db.Integer, db.ForeignKey("decks.id"), nullable=False)
+    card_id = db.Column(db.Integer, db.ForeignKey("cards.id"), nullable=False)
 
     # define the relationships
     deck = db.relationship(

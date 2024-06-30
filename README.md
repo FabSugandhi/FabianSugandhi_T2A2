@@ -78,6 +78,8 @@ Student Name: Fabian Sugandhi\
 
 ## R1: Explain the problem that this app will solve, and explain how this app solves or addresses the problem
 
+This application was developed as a tool to assist players with the Pokemon Trading Card Game (Pokemon TCG), namely as a deck and card tracking tool. The Pokemon TCG is a copyrighted property trademark of the Pokemon Company International (Pokemon Company International, 2024).
+
 While Pokemon TCG is one of the most popular Trading Card Game today, it is not without problems. As one of the biggest and one of the longest running name in the Trading Card Game scene, the Pokemon TCG has a very extensive card library, with cards of the same name sometimes having different versions coming from different sets. It is also becomes the game standard for the players to play multiple copies of some of the important cards in their decks. Also, some players prefer to not have to buy too many additional copies of specific cards, just because they want to be including them in multiple decks, rather just swapping them between the decks they are currently playing.
 
 All these factors make it a very arduous task for the players to manually keep track of what cards they already have and which decks have they included each card to, something that might keep newer players away from exploring the game. This app is developed in order to alleviate some of those issues.
@@ -176,15 +178,49 @@ For the purpose of this application, a PostgreSQL database named pokemontcg_db i
 
 ### Users
 
-User-related information are stored in the __users__ table. Each record in the table represents a registered user of the application, with information on their email, hashed password, name, admin rights, and their unique ID (the primary key). 
+User-related information are stored in the __users__ table. Each record in the table represents a registered user of the application, with information on their email, hashed password, name, admin rights, and their unique ID (the primary key).
 
 ### Decks
 
 Deck-related information are stored in the __decks__ table. Each record in the table represents a deck that a user has registered into the system, with information on their name, types, description, the user who made the post (using a __user_id__ foreign key) and their unique ID (the primary key). As a result, a __user__ can be associated with multiple __decks__, and a __deck__ can be associated with only one __user__.
 
+### Deck_cards
+
+Deck-cards-related information are stored in the __deck_cards__ table. Each record in the table represents the cards that a user has registered into each of their deck, with information on which deck ID & card ID (both being foreign keys from the __decks__ and __cards__ table respectively) and their unique ID (the primary key). As a result, a single __deck_card__ can only be associated with one __deck__ and __card__.
+
+### Cards
+
+Card-related information are stored in the __cards__ table. Each record in the table represents a card that an admin has registered into the system, with information on their official card_id, name, type, set_id (using a __set_id__ foreign key) and their application-unique ID (the primary key). As a result, a __card__ can be associated with multiple __deck_cards__, and a __card__ can be associated with only one __set__.
+
+### Sets
+
+Set-related information are stored in the __sets__ table. Each record in the table represents a set that an admin has registered into the system, with information on their official name, associated game series, and their application-unique ID (the primary key). As mentioned previously, a __set__ can be associated with multiple __cards__.
+
 ## R7: Explain the implemented models and their relationships, including how the relationships aid the database implementation
 
-NEED TO BE DONE
+### User model
+
+The __user__ model represents a __user__ record in the database. It has a one-to-many relationship with the __deck__ model, meaning that a __user__ can be associated with multiple __decks__ as their owner, but each __deck__ stored in the database can only have one __user__ as its owner. To define this relationship in the database, __user_id__ is used as a foreign key in the __deck__ model. There is also a "cascade delete" added here to ensure that all __decks__ owned by the __user__ are removed from the database if that __user__ is deleted.
+
+### Deck model
+
+The __deck__ model represents a __deck__ record in the database. It has a many-to-one relationship with the __user__ model, meaning that a __user__ can be associated with multiple __decks__ as their owner, but each __deck__ stored in the database can only have one __user__ as its owner.
+
+It also has a one-to-many relationship with the __deck_card__ model, meaning that a __deck__ can have multiple __deck_cards__ as its content, but each single __deck_card__ can only belong to one __deck__. To define this relationship in the database, __deck_id__ is used as a foreign key in the __deck_card__ model. There is also a "cascade delete" added here to ensure that all __deck_cards__ associated with the __deck__ are removed from the database if that __deck__ is deleted.
+
+### Deck_card model
+
+The __deck_card__ model represents a __deck_card__ record in the database, that is an instance of a card that is the content of a certain deck. It has a one-to-many relationships with the __deck__ and __card__ model, meaning that a __deck_card__ can only be a content of one __deck__ and can only be an instance of one specific __card__. To define this relationship in the database, __deck_id__ and __card_id__ are used as foreign keys in the __deck_card__ model.
+
+### Card model
+
+The __card__ model represents a __card__ record in the database. It has a one-to-many relationship with the __deck_card__ model, meaning that a unique __card__ can be present as multiple __deck_cards__ in multiple __decks__, but each single __deck_card__ can only represent one unique __card__. To define this relationship in the database, __card_id__ is used as a foreign key in the __deck_card__ model. There is also a "cascade delete" added here to ensure that all __deck_cards__ associated with the __card__ are removed from the database if that __card__ is deleted.
+
+It also has a many-to-one relationship with the __set__ model, meaning that each unique __card__ can only come from one specific __set__. This is defined by using __set_id__ as foreign key in the __card__ model.
+
+### Set model
+
+The __set__ model represents a __set__ record in the database. It has a one-to-many relationship with the __card__ model, meaning that a __set__ can contain multiple unique __cards__ as its content, but each unique __card__ can only come from specific __set__. To define this relationship in the database, __set_id__ is used as a foreign key in the __card__ model. There is also a "cascade delete" added here to ensure that all __cards__ associated with the __set__ are removed from the database if that __set__ is deleted.
 
 ## R8: Explain how to use this application’s API endpoints
 
@@ -528,5 +564,7 @@ Panchenko, I. (2021). _PostgreSQL benefits and challenges: a snapshop_. InfoWorl
 Pallets. (2010). _Flask_. https://flask.palletsprojects.com/en/3.0.x/
 
 Peterson, R. (2024). _What is PostgreSQL? Introduction, advantages & disadvantages_. Guru99. https://www.guru99.com/introduction-postgresql.html
+
+Pokemon Company International. (2024). _Pokemon Trading Card Game_. Pokemon. https://www.pokemon.com/us/pokemon-tcg
 
 Singh, G. (2023). _The power of PostgreSQL: a comprehensive exploration_. Vertisystem. https://vertisystem.medium.com/the-power-of-postgresql-a-comprehensive-exploration-dba09e0e030c
